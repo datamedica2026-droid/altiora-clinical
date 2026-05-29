@@ -14070,7 +14070,7 @@ REGLAS CRÍTICAS:
 //  LLAMADA A LA API
 // ════════════════════════════════════════════════════════
 async function llamarAPI(prompt) {
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
+  const response = await fetch('/api/anthropic', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -20648,7 +20648,7 @@ async function depAnalizarIA() {
       var pctV=DEP.rows.length?Math.round((DEP.rows.length-vals.length)/DEP.rows.length*100):0;
       return {col:h,idx:i,pctVacio:pctV,muestra:[...new Set(vals)].slice(0,4).join(' / ')};
     }).filter(Boolean);
-    var resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,messages:[{role:'user',content:'Analiza estas columnas de un Excel médico. Detecta: columnas sin nombre descriptivo, con demasiados vacíos, con nombres duplicados, con formato inconsistente. Para cada problema devuelve col_index (0-based), tipo y sugerencia corta. Responde SOLO JSON: {"problemas":[{"col_index":0,"tipo":"","msg":"","sugerencia":""}]}\n\nColumnas:\n'+JSON.stringify(resumen)}]})});
+    var resp=await fetch('/api/anthropic',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,messages:[{role:'user',content:'Analiza estas columnas de un Excel médico. Detecta: columnas sin nombre descriptivo, con demasiados vacíos, con nombres duplicados, con formato inconsistente. Para cada problema devuelve col_index (0-based), tipo y sugerencia corta. Responde SOLO JSON: {"problemas":[{"col_index":0,"tipo":"","msg":"","sugerencia":""}]}\n\nColumnas:\n'+JSON.stringify(resumen)}]})});
     var data=await resp.json();
     var txt=(data.content||[]).find(function(b){return b.type==='text';});
     if(txt){
@@ -20784,7 +20784,7 @@ async function dmDictEnriquecerConIA(espec, columnas) {
   if (!sinOpciones.length) return;
 
   try {
-    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+    var resp = await fetch('/api/anthropic', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -21052,7 +21052,7 @@ async function dmLimAnalizarConAgente() {
         '"problemas":[],"columnas_sin_match":[],"variables_sin_datos":[],"resumen":""}';
     }
 
-    var resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
+    var resp=await fetch('/api/anthropic',{method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         model:'claude-sonnet-4-20250514',
@@ -22487,7 +22487,7 @@ async function dmAgenteEnviar() {
       asisAgregarMensaje('assistant', resp);
       ASIS.historial.push({ role:'assistant', content:resp });
     } else {
-      var res = await fetch('https://api.anthropic.com/v1/messages', {
+      var res = await fetch('/api/anthropic', {
         method:'POST',
         headers:{'Content-Type':'application/json'},
         body:JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1500,
@@ -24794,7 +24794,7 @@ async function asatGenerar() {
       return;
     }
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const response = await fetch('/api/anthropic', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
